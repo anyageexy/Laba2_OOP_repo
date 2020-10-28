@@ -134,6 +134,7 @@ int main() {
 	delete s1;
 	delete s2;
 
+
 	_getch();
 	return 0;
 }
