@@ -12,13 +12,14 @@ public:
 	}
 	Point(int x, int y) {//конструктор с параметрами
 		printf("Конструктор с параметрами: Point(int x, int y)\n");//для отладочного вывода
-		this->x = x;//(?????)
-		this->y = y;//(?????)
+		this->x = x;//this-указатель на объект текущего класса
+		this->y = y;//ему присваивается указанное в параметрах значение
 	}
-	Point(const Point& p) {//копирующий конструктор
+	Point(const Point& p) {//копирующий конструктор значение передается по ссылке
+		//const потому что мы ничего не меняем в объекте Point который мы принимаем
 		printf("Копирующий конструктор: Point(const Point &p)\n");//для отладочного вывода
-		x = p.x;//(??????)
-		y = p.y;//(??????)
+		x = p.x;//
+		y = p.y;//
 	}
 	virtual ~Point() {//деструктор
 		cout << "Текущее состояние объектов х и у: " << x << " " << y << endl;
@@ -37,14 +38,14 @@ void Point::reset() {//реализация метода сразу после определения
 	y = 0;
 }
 
-class ColoredPoint :public Point { //создаем класс/////////////////////////////////
-protected: int color;
+class ColoredPoint :public Point { //создаем класс-потомок
+protected: int color;//protected открывает доступ к членам класса дружественным и дочерним классам
 public:
-	ColoredPoint() :Point() {//конструктор
+	ColoredPoint() :Point() {//конструктор// в нем через :  вызываем конструктор базового класса
 		printf("Конструктор Colored по умолчанию\n");//для отладочного вывода
-		color = 0;
+		color = 0;//дополнительно заполняем поле color
 	}
-	ColoredPoint(int x, int y, int color) :Point(x, y) {//конструктор с параметрами
+	ColoredPoint(int x, int y, int color) :Point(x, y) {//конструктор с параметрами //: вызываем конструктор Point с параметрами
 		printf("Конструктор Colored с параметрами: ColoredPoint(int x, int y)\n");//для отладочного вывода
 		this->color = color;//(?????)
 	}
@@ -58,10 +59,9 @@ public:
 		cout << "Текущее состояние объектов х и у и color: " << x << " " << y << " " << color << endl;
 		cout << "ColoredPoint-деструктор" << endl;
 	}
-	void change_color(int new_color) {//метод изменения координат после определения
+	void change_color(int new_color) {//метод изменение цвета
 		color = new_color;
 	}
-	void reset();
 };
 
 class Section { //создаем класс Отрезки
@@ -97,14 +97,14 @@ public:
 
 int main() {
 	setlocale(LC_ALL, "rus");
-	printf("Static objects\n");
+	printf("Статические объекты\n");
 	{
 		Point p;//создаем объект статически c помощью конструктора
 		Point p2(5, 10);//объект с помощтю конструткора с параметрами
 		Point p3(p2);//объект с помощью конструктора копирования
 		printf("Самовызывающиеся деструкторы:\n");
 	}
-	printf("Dinamic objects\n");
+	printf("Динамические объекты\n");
 	Point* d = new Point;//создаем динамический объект с помощью конструктора
 	Point* d2 = new Point(10, 15);//создаем динамический объект с помощью конструктора с параметрами
 	Point* d3 = new Point(*d2);//объект с помощью конструктора копирования, р2 разыменовываем(????)
