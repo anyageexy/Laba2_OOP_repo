@@ -47,13 +47,13 @@ public:
 	}
 	ColoredPoint(int x, int y, int color) :Point(x, y) {//конструктор с параметрами //: вызываем конструктор Point с параметрами
 		printf("Конструктор Colored с параметрами: ColoredPoint(int x, int y)\n");//для отладочного вывода
-		this->color = color;//(?????)
+		this->color = color;//
 	}
 	ColoredPoint(const ColoredPoint& p) {//копирующий конструктор
 		printf("Копирующий конструктор: ColoredPoint(const Point &p)\n");//для отладочного вывода
 		color = p.color;
-		x = p.x;//(??????)
-		y = p.y;//(??????)
+		x = p.x;
+		y = p.y;
 	}
 	virtual ~ColoredPoint() {//деструктор
 		cout << "Текущее состояние объектов х и у и color: " << x << " " << y << " " << color << endl;
@@ -66,12 +66,12 @@ public:
 
 class Section { //создаем класс Отрезки
 protected:
-	Point* p1;
+	Point* p1;//указатели на первую и вторую точки отрезка для Section из объекта класса Point
 	Point* p2;
 public:
 	Section() {//конструктор
 		printf("Конструктор по умолчанию Section\n");//для отладочного вывода
-		p1 = new Point;
+		p1 = new Point;//создание новых точек для отрезка с помощью констркутора по умолчанию Point
 		p2 = new Point;
 	}
 	Section(int x1, int y1, int x2, int y2) {//конструктор с параметрами
@@ -83,12 +83,14 @@ public:
 	}
 	Section(const Section& s) {//копирующий конструктор
 		printf("Копирующий конструктор: Section(const Section &s)\n");//для отладочного вывода
-		p1 = new Point(*(s.p1));
+		p1 = new Point(*(s.p1));//р1-указатель на Point поэтому мы его разыменовываем
+								//оператор разыменования позволяет полцчить значение по указанному адресу
+								// мы берем тот отрезок который нам передается и создаем точную копию с помощью вызова конструктора копирования
 		p2 = new Point(*(s.p2));
 	}
 	virtual ~Section() {//деструктор
 		//cout << "Текущее состояние объектов х и у: " << x << " " << y << endl;
-		delete p1;
+		delete p1;//созданные точки удаляем
 		delete p2;
 		cout << "Section-деструктор" << endl;
 	}
@@ -97,14 +99,14 @@ public:
 
 int main() {
 	setlocale(LC_ALL, "rus");
-	printf("Статические объекты\n");
+	printf("\n\nСтатические объекты\n");
 	{
 		Point p;//создаем объект статически c помощью конструктора
 		Point p2(5, 10);//объект с помощтю конструткора с параметрами
 		Point p3(p2);//объект с помощью конструктора копирования
 		printf("Самовызывающиеся деструкторы:\n");
 	}
-	printf("Динамические объекты\n");
+	printf("\n\nДинамические объекты\n");
 	Point* d = new Point;//создаем динамический объект с помощью конструктора
 	Point* d2 = new Point(10, 15);//создаем динамический объект с помощью конструктора с параметрами
 	Point* d3 = new Point(*d2);//объект с помощью конструктора копирования, р2 разыменовываем(????)
@@ -114,21 +116,31 @@ int main() {
 	delete d2;
 	delete d3;
 
-	Point* t = new Point(1, 2);
+	printf("\n\nИспользование метода move\n");
+	Point* t = new Point(1, 2);//использование метода move
 	t->move(10, 10);
 	delete t;
 
-	Point* t2 = new Point(1, 2);
+	printf("\n\nИспользование метода reset и move\n");
+	Point* t2 = new Point(1, 2);//использование метода reset и move вместе
 	t2->reset();
 	t2->move(10, 10);
 	delete t2;
 
-	ColoredPoint* c1 = new ColoredPoint;
+	printf("\n\nОбъекты класса-наследника\n");
+	ColoredPoint* c1 = new ColoredPoint;//объект класса наследника
 	delete c1;
 
-	ColoredPoint* c2 = new ColoredPoint(1, 2, 45);
+	ColoredPoint* c2 = new ColoredPoint(1, 2, 45);//объект класса наслденика
 	delete c2;
 
+	printf("\n\nПомещение объектов в перемнные различных типов\n");
+	Point* p1 = new ColoredPoint();
+	Point* p2 = new ColoredPoint(1, 2, 45);
+	delete p1;
+	delete p2;
+
+	printf("\n\nКомпозиция: Section\n");
 	Section* s1 = new Section;
 	Section* s2 = new Section(*s1);
 	delete s1;
