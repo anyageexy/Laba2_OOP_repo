@@ -33,7 +33,7 @@ public:
 	void reset();
 };
 
-void Point::reset() {//реализация метода сразу после определения
+void Point::reset() {//реализация метода сразу после определения // метод обнуляет координаты
 	x = 0;
 	y = 0;
 }
@@ -78,7 +78,6 @@ public:
 		printf("Конструктор с параметрами: Section(int x1, int y1, int x2, int y2)\n");//для отладочного вывода
 		p1 = new Point(x1, y1);
 		p2 = new Point(x2, y2);
-
 
 	}
 	Section(const Section& s) {//копирующий конструктор
